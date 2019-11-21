@@ -32,22 +32,56 @@ class Armor:
         return random_value
 
 #HERO CLASS
-class Hero():
+class Hero:
     def __init__(self, name, starting_health=100):
-        self.abilities = list()
-        self.armors = list()
+        self.abilities = []
+        self.armors = []
         self.name = name 
         self.starting_health = starting_health 
         self.current_health = starting_health
     
+    def add_ability(self, ability):
+        self.abilities.append(ability)
 
+    def attack(self):
+        '''Calculate the total damage from all ability attacks. 
+        return: total_damage:Int'''
+        # start our total out at 0
+        total_damage = 0
+            # loop through all of our hero's abilities
+        for ability in self.abilities:
+                # add the damage of each attack to our running total
+            total_damage += ability.attack()
+            # return the total damage
+        return total_damage
+
+    def add_armor(self, armor):
+        self.armors.append(armor)
+
+    def defend(self):
+        total_block = 0
+        for block in self.armors:
+            total_block += block.block()
+        return total_block
+            
+    def take_damage(self, damage):
+        defense = self.defend()    
+        self.current_health -= damage - defense
+    
+    def is_alive(self):
+        if self.current_health > 0:
+            return True
+        else:
+            return False
+    
+    def fight(self, opponent):
+        
+    
 if __name__ == "__main__":
     # If you run this file from the terminal
     # this block is executed.
-    ability = Ability("Debugging Ability", 20)
-    print(ability.name)
-    print(ability.attack())    
-    armor = Armor("chestpiece", 20)
-    
-    print(armor.name)
-    print(armor.block())
+    hero = Hero("Grace Hopper", 200)
+    hero.take_damage(150)
+    print(hero.is_alive())
+    hero.take_damage(15000)
+    print(hero.is_alive())
