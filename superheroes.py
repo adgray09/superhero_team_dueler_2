@@ -149,6 +149,45 @@ class Team:
             if hero.is_alive() == False:
                 hero.current_health = hero.starting_health
     
+    def attack(self, other_team):
+        
+        living_heroes = list()
+        living_opponents = list()
+        
+        for hero in self.heroes:
+            living_heroes.append(hero)
+
+        for hero in other_team.heroes:
+            living_opponents.append(hero)
+    
+        while len(living_heroes) > 0 and len(living_opponents)> 0:
+            hero_1 = random.choice(self.heroes)
+            hero_2 = random.choice(other_team.heroes)
+            if hero_1.is_alive() and hero_2.is_alive():
+                hero_1.fight(hero_2)
+
+#ARENA CLASS     
+class Arena:
+    def __init__ (self):
+        self.team_one = None
+        self.team_two = None
+        
+    def create_ability(self):
+        name = input("What is your ability name?")
+        max_damage = input("What is your abailities max damage?")
+        return Ability(name, max_damage)
+
+    def create_weapon(self):
+        name = input("What is the your weapons name?")
+        max_damage = input("What is the weapons max damage?")
+        return Weapon(name, max_damage)
+    
+    def create_armor(self):
+        name = input("What is the name of your armor?")
+        max_block = input("What is the armors block strength?")
+        return Armor(name, max_block)
+        
+        
 if __name__ == "__main__":
     # If you run this file from the terminal
     # this block is executed.
