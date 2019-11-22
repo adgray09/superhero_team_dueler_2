@@ -13,7 +13,6 @@ class Ability:
         self.name = name
         self.max_damage = max_damage
         
-        
     def attack(self):
         ''' Return a value between 0 and the value set by self.max_damage.'''
 
@@ -39,6 +38,8 @@ class Hero:
         self.name = name 
         self.starting_health = starting_health 
         self.current_health = starting_health
+        self.deaths = 0
+        self.kills = 0
     
     def add_ability(self, ability):
         self.abilities.append(ability)
@@ -55,6 +56,12 @@ class Hero:
             # return the total damage
         return total_damage
 
+    def add_kill(self, num_kills=1):
+        self.kills += num_kills
+    
+    def add_death(self, num_deaths=1):
+        self.deaths += num_deaths
+    
     def add_armor(self, armor):
         self.armors.append(armor)
 
@@ -89,8 +96,12 @@ class Hero:
         
         if self.current_health <= 0:
             print(opponent.name + " won the battle!")
+            self.add_death()
+            opponent.add_kill()
         elif opponent.current_health <= 0: 
             print(self.name + " won the battle!")
+            self.add_kill()
+            opponent.add_death()
         else:
             print("Draw!")
     
@@ -105,6 +116,38 @@ class Weapon(Ability):
             
         #choosing random number between 1/2 and full of max_damage
         return random.randint(self.max_damage//2, self.max_damage)
+    
+class Team:
+    def __init__ (self, name):
+        self.name = name
+        self.heroes = list()
+    
+    def remove_hero(self, name):
+        
+        foundHero = False
+        for hero in self.heroes:
+            if hero.name == name:
+                self.heroes.remove(hero)
+        if not foundHero:
+            return 0
+    
+    def view_all_heroes(self):
+        for hero in self.heroes:
+            print(hero.name)
+            
+    def add_hero(self, hero):
+        self.heroes.append(hero)
+        
+    def stats(self):
+        '''Print team statistics'''
+        for hero in self.heroes:
+            kd = hero.kills / hero.deaths
+            print("{} Kill/Deaths:{}".format(hero.name,kd))
+    
+    def revive_heroes(self):
+        for hero in self.heroes:
+            if hero.is_alive() == False:
+                hero.current_health = hero.starting_health
     
 if __name__ == "__main__":
     # If you run this file from the terminal
