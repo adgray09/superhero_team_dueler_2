@@ -58,6 +58,9 @@ class Hero:
     def add_armor(self, armor):
         self.armors.append(armor)
 
+    def add_weapon(self, weapon):
+        self.abilities.append(weapon)
+        
     def defend(self):
         total_block = 0
         for block in self.armors:
@@ -75,13 +78,38 @@ class Hero:
             return False
     
     def fight(self, opponent):
+        print('A brawl is happening between  ' + self.name + ' and ' +opponent.name + '! Who will be victorious?')
+        while self.is_alive() and opponent.is_alive():
+            if self.abilities or opponent.abilities:
+                self.take_damage(opponent.attack())
+                opponent.take_damage(self.attack())
+                print()
+            else: 
+                print("DRAW!")
         
+        if self.current_health <= 0:
+            print(opponent.name + " won the battle!")
+        elif opponent.current_health <= 0: 
+            print(self.name + " won the battle!")
+        else:
+            print("Draw!")
+    
+#WEAPON CLASS
+class Weapon(Ability):
+    def attack(self):
+        """  This method returns a random value
+        between one half to the full attack power of the weapon.
+        """
+        # TODO: Use integer division to find half of the max_damage value
+        # then return a random integer between half of max_damage and max_damage
+            
+        #choosing random number between 1/2 and full of max_damage
+        return random.randint(self.max_damage//2, self.max_damage)
     
 if __name__ == "__main__":
     # If you run this file from the terminal
     # this block is executed.
-    hero = Hero("Grace Hopper", 200)
-    hero.take_damage(150)
-    print(hero.is_alive())
-    hero.take_damage(15000)
-    print(hero.is_alive())
+    hero = Hero("Wonder Woman")
+    weapon = Weapon("Lasso of Truth", 90)
+    hero.add_weapon(weapon)
+    print(hero.attack())
